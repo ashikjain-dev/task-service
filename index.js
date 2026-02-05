@@ -4,6 +4,8 @@ const cookeParser = require("cookie-parser");
 require("dotenv").config();
 
 const { logger } = require("./logger");
+const { taskRoute } = require("./routes/tasks");
+const { connectToMongoDB } = require("./config/mongo");
 
 const PORT = process.env.PORT ?? 3001;
 
@@ -26,11 +28,30 @@ app.use((req, res, next) => {
   });
   next();
 });
+app.use("/api/v1/tasks", taskRoute);
 app.get("/", (req, res, next) => {
   res.json({ data: "task service is running." });
 });
-app.listen(PORT, () => {
-  logger.info(`The task service is up and running on the port ${PORT}`, {
-    port: PORT,
+app.use((req, res, next) => {
+  res.status(404).json({ data: "Page not found" });
+  logger.info("page is not found", {
+    url: req.originalUrl,
+    method: req.method,
+    status: res.statusCode,
   });
 });
+
+connectToMongoDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      logger.info(`The task service is up and running on the port ${PORT}`, {
+        port: PORT,
+      });
+    });
+  })
+  .catch((error) => {
+    logger.error(error.message, {
+      stack: error.stack,
+    });
+    process.exit(0);
+  });
