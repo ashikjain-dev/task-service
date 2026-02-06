@@ -24,7 +24,7 @@ const createTask = async (req, res, next) => {
     res.status(201).json({ resFromDB });
   } catch (error) {
     res.status(500).json({ data: "something went wrong." });
-    logger.error(error.messsage, {
+    logger.error(error.message, {
       stack: error.stack,
     });
   }
@@ -52,7 +52,7 @@ const showAllTasks = async (req, res, next) => {
     res.json({ data: resArray });
   } catch (error) {
     res.status(500).json({ data: "something went wrong." });
-    logger.error(error.messsage, {
+    logger.error(error.message, {
       stack: error.stack,
     });
   }
@@ -74,7 +74,7 @@ const getAll = async (req, res, next) => {
     res.json({ data: resArray });
   } catch (error) {
     res.status(500).json({ data: "something went wrong." });
-    logger.error(error.messsage, {
+    logger.error(error.message, {
       stack: error.stack,
     });
   }

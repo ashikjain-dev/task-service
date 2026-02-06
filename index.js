@@ -1,6 +1,6 @@
 const express = require("express");
 const { rateLimit } = require("express-rate-limit");
-const cookeParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const { logger } = require("./logger");
@@ -14,15 +14,15 @@ const app = express();
 const basicLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 10,
-  message: { data: "Too many requests, try again after sometime." },
+  message: { data: "Too many requests, try again after some time." },
   legacyHeaders: false,
   standardHeaders: "draft-8",
 });
 app.use(basicLimiter);
 app.use(express.json());
-app.use(cookeParser());
+app.use(cookieParser());
 app.use((req, res, next) => {
-  logger.http("Request Recieved", {
+  logger.http("Request Received", {
     url: req.originalUrl,
     method: req.method,
   });
