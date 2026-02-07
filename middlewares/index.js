@@ -1,3 +1,4 @@
 const { validateUser } = require("./auth");
 const { validateTaskData } = require("./validate");
-module.exports = { validateUser, validateTaskData };
+const { errorHandler } = require("./error");
+module.exports = { validateUser, validateTaskData, errorHandler };

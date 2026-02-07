@@ -6,6 +6,7 @@ require("dotenv").config();
 const { logger } = require("./logger");
 const { taskRoute } = require("./routes/tasks");
 const { connectToMongoDB } = require("./config/mongo");
+const { errorHandler } = require("./middlewares/");
 
 const PORT = process.env.PORT ?? 3001;
 
@@ -32,14 +33,14 @@ app.use("/api/v1/tasks", taskRoute);
 app.get("/", (req, res, next) => {
   res.json({ data: "task service is running." });
 });
+// 404 handler
 app.use((req, res, next) => {
-  res.status(404).json({ data: "Page not found" });
-  logger.info("page is not found", {
-    url: req.originalUrl,
-    method: req.method,
-    status: res.statusCode,
-  });
+  const error = new Error("Page not found");
+  error.statusCode = 404;
+  next(error);
 });
+// Global Error Handler
+app.use(errorHandler);
 
 connectToMongoDB()
   .then(() => {
