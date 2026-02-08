@@ -24,7 +24,10 @@ app.use(basicLimiter);
 const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:5173";
 app.use(cors({
   origin: corsOrigin,
-  credentials: true
+  credentials: true,
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
 }));
 
 app.use(express.json());
