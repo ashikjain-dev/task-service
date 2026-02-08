@@ -11,7 +11,11 @@ const { connectToMongoDB } = require("./config/mongo");
 const PORT = process.env.PORT ?? 3001;
 
 const app = express();
-
+const corsOrigin = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : "http://localhost:5173";
+app.use(cors({
+  origin: corsOrigin,
+  credentials: true
+}));
 const basicLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 10,
@@ -21,11 +25,7 @@ const basicLimiter = rateLimit({
 });
 app.use(basicLimiter);
 
-const corsOrigin = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : "http://localhost:5173";
-app.use(cors({
-  origin: corsOrigin,
-  credentials: true
-}));
+
 
 app.use(express.json());
 app.use(cookieParser());
