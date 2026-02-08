@@ -24,12 +24,12 @@ const getAllTask = async (userId, skip, limit) => {
     const resFromDB = await db
       .collection("tasks")
       .find({ userId: new ObjectId(userId) })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .project({
         title: 1,
         description: 1,
-        _id: 0,
         tags: 1,
         createdAt: 1,
         updatedAt: 1,
@@ -50,12 +50,12 @@ const getTasks = async (skip, limit) => {
     const resFromDB = await db
       .collection("tasks")
       .find()
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .project({
         title: 1,
         description: 1,
-        _id: 0,
         tags: 1,
         createdAt: 1,
         updatedAt: 1,
@@ -70,4 +70,18 @@ const getTasks = async (skip, limit) => {
   }
 };
 
-module.exports = { storeTask, getAllTask, getTasks };
+const removeTask = async (taskId, userId) => {
+  try {
+    const db = await getDB();
+    const resFromDB = await db
+      .collection("tasks")
+      .deleteOne({ _id: new ObjectId(taskId), userId: new ObjectId(userId) });
+    return resFromDB;
+  } catch (error) {
+    logger.error(error.message, {
+      stack: error.stack,
+    });
+  }
+};
+
+module.exports = { storeTask, getAllTask, getTasks, removeTask };
