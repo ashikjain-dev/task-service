@@ -14,13 +14,13 @@ const validateTaskData = (req, res, next) => {
     });
     return;
   }
-  if (title.trim().length < 3 || title.trim().length > 50) {
+  if (title.trim().length < 3 || title.trim().length > 200) {
     res.status(400).json({
       data: "Title must contain more than 3 characters and less than 50 characters.",
     });
     return;
   }
-  if (description.trim().length < 3 || description.trim().length > 200) {
+  if (description.trim().length < 3 || description.trim().length > 2000) {
     res.status(400).json({
       data: "Description must contain more than 3 characters and less than 200 characters.",
     });
